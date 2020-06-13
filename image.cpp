@@ -127,7 +127,7 @@ image::~image()
     pixel_val = NULL;
 }
 
-
+/*
 void image::transformation(const image & origen, const string &factor){
 	if (factor == 0){
 		this->id_z(origen);
@@ -151,7 +151,7 @@ void image::transformation(const image & origen, const string &factor){
 
 }
 
-
+*/
 void image::add_exp_ln(const image& old_image){
      rows = old_image.rows;
      columns = old_image.columns;

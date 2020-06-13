@@ -10,7 +10,7 @@
 #include "pixel.h"
 using namespace std;
 
-enum function {
+enum type_function {
 	z,
 	exp_z,
 	ln_z

@@ -20,17 +20,17 @@ private:
   node<T>* next;
 
 public:
-  node(const T&, node<T> *);
+  node(T , node<T> *p =NULL);
 
   T getdata();
-  void setdata(const T&);
+  void setdata(T);
   node* getnext();
-  void setnext(node*);
+  void setnext(node <T>*);
 
 };
 
 template <class T>
-node<T>::node(const T& d,node<T> *p=0){
+node<T>::node(T d, node<T> *p){
 	data = d;
 	next = p;
 }
@@ -41,17 +41,17 @@ T node<T>::getdata(){
 }
 
 template <class T>
-void node<T>::setdata(const T&d){
+void node<T>::setdata(T d){
 	 data = d;
 }
 
 template <class T>
-node* node<T>::getnext(){
+node<T>* node<T>::getnext(){
 	return next;
 }
 
 template <class T>
-void node<T>::setnext(node *n){
+void node<T>::setnext(node <T> *n){
 	 next = n;
 }
 
