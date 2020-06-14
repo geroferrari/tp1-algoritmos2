@@ -403,81 +403,191 @@ void image::negateimage(const image &origen)
 
 }
 
-void image::convertFunction(stack<string> & numbers)
+void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bool & flag_empty)
 {
-	stack<string> pila_resultado;
-	stack<string> numbers_straight;
 	string aux;
 	double arg1, arg2;
 
-	while (!numbers.empty()){
-	 	numbers_straight.push(numbers.pop());
-	}
+	if(flag_empty == 0)
+	{
+		aux = pila_original.pop();
 
-	while (!numbers_straight.empty()){
-		aux = numbers_straight.pop();
-		cout << aux <<endl;
+		pila_final.push(aux);
+
+		if(!pila_original.empty())
+		{
+			return calculatorRPN(pila_original, pila_final, flag_empty);
+		}
+		else{
+			flag_empty = 1;
+		}
+		
+	}
+	if(flag_empty == 1)
+	{
+		if(pila_final.empty())
+		{
+			return;
+		}
+		aux = pila_final.pop();
+		cout << aux << endl;
+
 		if(isdigit(aux[0]))
 		{
-			pila_resultado.push(aux);
+			pila_original.push(aux);
+			return calculatorRPN(pila_original, pila_final, flag_empty);
+
 		}
 		else if(aux == "+")
 		{
-			arg2 = stod(pila_resultado.pop(),NULL);
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(arg1 + arg2));
+			arg2 = stod(pila_original.pop(),NULL);
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(arg1 + arg2));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if(aux == "-")
 		{
-			arg2 = stod(pila_resultado.pop(),NULL);
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(arg1 - arg2));
+			arg2 = stod(pila_original.pop(),NULL);
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(arg1 - arg2));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if(aux == "*")
 		{
-			arg2 = stod(pila_resultado.pop(),NULL);
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(arg1 * arg2));
+			arg2 = stod(pila_original.pop(),NULL);
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(arg1 * arg2));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if(aux == "/")
 		{
-			arg2 = stod(pila_resultado.pop(),NULL);
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(arg1 / arg2));
+			arg2 = stod(pila_original.pop(),NULL);
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(arg1 / arg2));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if(aux == "^")
 		{
-			arg2 = stod(pila_resultado.pop(),NULL);
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(pow(arg1,arg2)));
+			arg2 = stod(pila_original.pop(),NULL);
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(pow(arg1,arg2)));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "sin")
 		{
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(sin(arg1)));
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(sin(arg1)));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "cos")
 		{
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(cos(arg1)));
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(cos(arg1)));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "tan")
 		{
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(tan(arg1)));
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(tan(arg1)));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "ln")
 		{
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(log(arg1)));
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(log(arg1)));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "exp")
 		{
-			arg1 = stod(pila_resultado.pop(),NULL);
-			pila_resultado.push(to_string(exp(arg1)));
+			arg1 = stod(pila_original.pop(),NULL);
+			pila_original.push(to_string(exp(arg1)));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 	}
-	cout << pila_resultado.pop() << endl;
+	
+}
+
+void image::convertFunction(stack<string> & numbers)
+{
+	stack<string> pila_resultado;
+	bool vacio = 0;
+
+	calculatorRPN(numbers,pila_resultado,vacio);
+	cout << numbers.pop() << endl;
+	// stack<string> numbers_straight;
+	// string aux;
+	// double arg1, arg2;
+
+	// while (!numbers.empty()){
+	// 	aux = numbers.pop();
+	// 	cout << aux << endl;
+	//  	numbers_straight.push(aux);
+	// }
+
+	// while (!numbers_straight.empty()){
+	// 	aux = numbers_straight.pop();
+	// 	cout << aux <<endl;
+	// 	if(isdigit(aux[0]))
+	// 	{
+	// 		pila_resultado.push(aux);
+	// 	}
+	// 	else if(aux == "+")
+	// 	{
+	// 		arg2 = stod(pila_resultado.pop(),NULL);
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(arg1 + arg2));
+	// 	}
+	// 	else if(aux == "-")
+	// 	{
+	// 		arg2 = stod(pila_resultado.pop(),NULL);
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(arg1 - arg2));
+	// 	}
+	// 	else if(aux == "*")
+	// 	{
+	// 		arg2 = stod(pila_resultado.pop(),NULL);
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(arg1 * arg2));
+	// 	}
+	// 	else if(aux == "/")
+	// 	{
+	// 		arg2 = stod(pila_resultado.pop(),NULL);
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(arg1 / arg2));
+	// 	}
+	// 	else if(aux == "^")
+	// 	{
+	// 		arg2 = stod(pila_resultado.pop(),NULL);
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(pow(arg1,arg2)));
+	// 	}
+	// 	else if (aux == "sin")
+	// 	{
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(sin(arg1)));
+	// 	}
+	// 	else if (aux == "cos")
+	// 	{
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(cos(arg1)));
+	// 	}
+	// 	else if (aux == "tan")
+	// 	{
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(tan(arg1)));
+	// 	}
+	// 	else if (aux == "ln")
+	// 	{
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(log(arg1)));
+	// 	}
+	// 	else if (aux == "exp")
+	// 	{
+	// 		arg1 = stod(pila_resultado.pop(),NULL);
+	// 		pila_resultado.push(to_string(exp(arg1)));
+	// 	}
+	// }
+	//cout << pila_resultado.pop() << endl;
 }
 
 
