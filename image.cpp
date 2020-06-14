@@ -477,9 +477,9 @@ void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bo
 		}
 		else if(aux == "^")
 		{
-			arg2 = stod(pila_original.pop(),NULL);
-			arg1 = stod(pila_original.pop(),NULL);
-			pila_original.push(to_string(pow(arg1,arg2)));
+			argc2 = argc2.string2Complex(pila_original.pop());
+			argc1 = argc1.string2Complex(pila_original.pop());
+			pila_original.push(argc1.complex2String(argc1 ^ argc2.getReal())); //Error si imaginario?
 			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "sin")
@@ -502,14 +502,16 @@ void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bo
 		}
 		else if (aux == "ln")
 		{
-			arg1 = stod(pila_original.pop(),NULL);
-			pila_original.push(to_string(log(arg1)));
+			argc1 = argc1.string2Complex(pila_original.pop());
+			argc1.ln(argc1);
+			pila_original.push(argc1.complex2String(argc1));
 			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 		else if (aux == "exp")
 		{
-			arg1 = stod(pila_original.pop(),NULL);
-			pila_original.push(to_string(exp(arg1)));
+			argc1 = argc1.string2Complex(pila_original.pop());
+			argc1.C_exp(argc1);
+			pila_original.push(argc1.complex2String(argc1));
 			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
 	}
