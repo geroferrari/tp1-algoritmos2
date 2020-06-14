@@ -8,9 +8,10 @@
 #include <string>
 #include <iostream>
 #include "pixel.h"
+#include "stack.h"
 using namespace std;
 
-enum function {
+enum type_function {
 	z,
 	exp_z,
 	ln_z
@@ -58,6 +59,8 @@ class image {
  	void ln_z(const image&);
  	void add_exp_ln(const image&);
  	void negateimage(const image& );
+
+   void convertFunction(stack<string> &);
 
  private :
  	string comment;

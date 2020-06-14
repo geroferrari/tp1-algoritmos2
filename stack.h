@@ -13,14 +13,15 @@ using namespace std;
 
 template <class T>
 class stack {
+
 private:
   node<T>* top;
-  int size;
+  unsigned int size;
 
 public:
   stack();
   ~stack();
-  void push(const T&);
+  void push(T);
   T pop();
   T gettop();
   int getsize();
@@ -30,16 +31,20 @@ public:
 
 template <class T>
 stack<T>::stack() {
-    top = NULL;
+	if(top != NULL){
+		top = NULL;
+	}
     size = 0;
 }
+
+
 
 template <class T>
 stack<T>::~stack() {
   if (top){
 	  node<T> *aux=top;
 	  while (aux){
-		  top=top->getSig();
+		  top=top->getnext();
 	      delete aux;
 	      aux=top;
 	  }
@@ -63,13 +68,13 @@ T stack<T>::gettop() {
     if (top)
         return top->getdata();
     else
-        cout << "Stack is empty" << endl;
+        return NULL;
+
 }
 
 template <class T>
-void stack<T>::push(const T & val) {
-	node<T>* temp = new node<T>(val);
-
+void stack<T>::push(T  val) {
+	node <T> * temp = new node<T> (val) ;
 	if (top == NULL) {
         top = temp;
     }
@@ -84,8 +89,8 @@ void stack<T>::push(const T & val) {
 template <class T>
 T stack<T>::pop() {
     if (top == NULL) {
-        cout << "Stack is empty" << endl;
-        return;
+        cerr << "Stack is empty" << endl;
+        exit(1);
     }
     else {
         node<T>* temp = top;
@@ -101,3 +106,5 @@ template <class T>
 int stack<T>::getsize() {
 	return size;
 }
+
+#endif
