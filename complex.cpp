@@ -3,7 +3,11 @@
  *
  */
 #include <cmath>
+#include <iostream>
+#include <string>
 #include "complex.h"
+
+using namespace std;
 
 
 
@@ -116,7 +120,6 @@ complex complex::operator^(const int &e){
 }
 
 
-
 double complex::C_abs(){
 	return  sqrt(real * real + imaginario * imaginario);
 }
@@ -169,5 +172,43 @@ complex& complex::operator= (const complex & c){
 return *this;
 }
 
+complex complex::string2Complex(const string &s)
+{
+	size_t division;
+	string first, second;
+	bool neg = 0;
+	
+	division = s.find('j');
 
+	//cout << "Pos: " << division << endl;
 
+	first = s.substr(0,division-1);
+	second = s.substr(division+1);
+
+	//cout << "First: " << first << " , Second: " << second << endl;
+
+	real = stod(first);
+	if(s[division] == '+')
+	{
+		imaginario = stod(second);
+	}
+	else
+	{
+		imaginario = stod(second);
+	}
+	
+	return complex(real, imaginario);
+
+}
+
+string complex::complex2String(const complex & c)
+{
+	if(c.imaginario >= 0)
+	{
+		return to_string(c.real) + "+j" + to_string(c.imaginario);
+	}
+	else
+	{
+		return to_string(c.real) + "-j" + to_string(c.imaginario);
+	}
+}

@@ -169,7 +169,7 @@ void shunting_yard(string & tokens, stack<string> & numbers){
 
 		/*************** se abre un parentesis *******************/
 		else if(tokens[i] == '('){
-			aux = "(";
+			aux = '(';
 			operators.push(aux);
 			old_precedence = 1;
 			if (tokens[i+1]=='-'){
@@ -179,7 +179,7 @@ void shunting_yard(string & tokens, stack<string> & numbers){
 
 		/*************** se ingresa un numero *******************/
 		else if(isdigit(tokens[i]) || (tokens[i] == '.' && isdigit(tokens[i+1]))){
-
+			
 			double val = stod(tokens.substr(i), &next_position);
 
 
@@ -273,7 +273,9 @@ void shunting_yard(string & tokens, stack<string> & numbers){
 				continue;
 			}
 			else if (new_precedence<=old_precedence){
-				numbers.push(operators.pop());
+				if(!operators.empty()){
+					numbers.push(operators.pop());
+				}
 				operators.push(aux);
 			}
 			else{
@@ -479,14 +481,13 @@ int main(int argc, char * const argv[])
 
 	//multiply(iss, oss);	    // Función externa, no es un metodo de ninguna clase o estructura usada en el código
 
-
 //	image img_destin(img_origin); // crea la imagen de salida copiando la de entrada
 	stack<string> pila_salida;
 	shunting_yard(factor, pila_salida);
 
 	//img_destin.transformation(img_origin , factor);  // se elige que funcion se aplicará a partir del valor de factor
 	
-
+	
 	image imagen;
 	imagen.convertFunction(pila_salida);
 	//img_destin.export_to_file(oss); // se guarda el archivo en  la imagen de salida

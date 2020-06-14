@@ -6,6 +6,8 @@
 #ifndef complex_INCLUDED
 #define complex_INCLUDED
 
+#include <string>
+#include <iostream>
 
 class complex {
 private:
@@ -53,6 +55,8 @@ public:
 
 	complex& operator = (const complex &);
 
+	complex string2Complex(const std::string &);
+	std::string complex2String(const complex &);
 
 };
 
