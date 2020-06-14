@@ -440,6 +440,10 @@ void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bo
 			}
 			if(aux[0] == 'j')
 			{
+				if(aux[1] == NULL) // En el caso que se haya puesto "j" solo, se modifica a "j1" para parsear bien
+				{
+					aux = aux + "1";
+				}
 				aux = "0+" + aux;
 			}
 			
@@ -482,24 +486,24 @@ void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bo
 			pila_original.push(argc1.complex2String(argc1 ^ argc2.getReal())); //Error si imaginario?
 			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
-		else if (aux == "sin")
-		{
-			arg1 = stod(pila_original.pop(),NULL);
-			pila_original.push(to_string(sin(arg1)));
-			return calculatorRPN(pila_original, pila_final, flag_empty);
-		}
-		else if (aux == "cos")
-		{
-			arg1 = stod(pila_original.pop(),NULL);
-			pila_original.push(to_string(cos(arg1)));
-			return calculatorRPN(pila_original, pila_final, flag_empty);
-		}
-		else if (aux == "tan")
-		{
-			arg1 = stod(pila_original.pop(),NULL);
-			pila_original.push(to_string(tan(arg1)));
-			return calculatorRPN(pila_original, pila_final, flag_empty);
-		}
+		// else if (aux == "sin")
+		// {
+		// 	arg1 = stod(pila_original.pop(),NULL);
+		// 	pila_original.push(to_string(sin(arg1)));
+		// 	return calculatorRPN(pila_original, pila_final, flag_empty);
+		// }
+		// else if (aux == "cos")
+		// {
+		// 	arg1 = stod(pila_original.pop(),NULL);
+		// 	pila_original.push(to_string(cos(arg1)));
+		// 	return calculatorRPN(pila_original, pila_final, flag_empty);
+		// }
+		// else if (aux == "tan")
+		// {
+		// 	arg1 = stod(pila_original.pop(),NULL);
+		// 	pila_original.push(to_string(tan(arg1)));
+		// 	return calculatorRPN(pila_original, pila_final, flag_empty);
+		// }
 		else if (aux == "ln")
 		{
 			argc1 = argc1.string2Complex(pila_original.pop());
@@ -511,6 +515,38 @@ void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bo
 		{
 			argc1 = argc1.string2Complex(pila_original.pop());
 			argc1.C_exp(argc1);
+			pila_original.push(argc1.complex2String(argc1));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
+		}
+		else if(aux == "arg")
+		{
+			complex auxc;
+			argc1 = argc1.string2Complex(pila_original.pop());
+			argc2 = argc1;
+			auxc.setReal(cos(argc1.C_arg()));
+			auxc.setImag(sin(argc2.C_arg()));
+			pila_original.push(argc1.complex2String(auxc));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
+		}
+		else if(aux == "abs")
+		{
+			argc1 = argc1.string2Complex(pila_original.pop());
+			argc1.setReal(argc1.C_abs());
+			argc1.setImag(0);
+			pila_original.push(argc1.complex2String(argc1));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
+		}
+		else if(aux == "im")
+		{
+			argc1 = argc1.string2Complex(pila_original.pop());
+			argc1.setReal(0);
+			pila_original.push(argc1.complex2String(argc1));
+			return calculatorRPN(pila_original, pila_final, flag_empty);
+		}
+		else if(aux == "re")
+		{
+			argc1 = argc1.string2Complex(pila_original.pop());
+			argc1.setImag(0);
 			pila_original.push(argc1.complex2String(argc1));
 			return calculatorRPN(pila_original, pila_final, flag_empty);
 		}
