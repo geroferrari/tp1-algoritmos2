@@ -434,12 +434,12 @@ complex  calculator_rpn(stack<string> & stack_output, const complex & variable){
 		exit(1);
 	}
 	string pivot_str;
-	pivot_str = stack_output.get_top();
+	pivot_str = stack_output.pop();
 
-	stack<string> stack_aux(stack_output.get_next_top(),stack_output.get_size()-1);
+	//stack<string> stack_aux(stack_output.get_next_top(),stack_output.get_size()-1);
 
 	if (is_operator(pivot_str)){
-		return make_operation(pivot_str, calculator_rpn(stack_aux, variable), calculator_rpn(stack_aux, variable));
+		return make_operation(pivot_str, calculator_rpn(stack_output, variable), calculator_rpn(stack_output, variable));
 	}
 
 	else if (isdigit(pivot_str[0]) || isdigit(pivot_str[1])){
@@ -452,7 +452,7 @@ complex  calculator_rpn(stack<string> & stack_output, const complex & variable){
 	}
 
 	else if (is_a_function(pivot_str)){
-		return make_function(pivot_str, calculator_rpn(stack_aux, variable));
+		return make_function(pivot_str, calculator_rpn(stack_output, variable));
 	}
 
 	else if (pivot_str == "z"){

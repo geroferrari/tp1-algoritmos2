@@ -135,28 +135,26 @@ void image::transformation(const image & origen,  stack<string> &stack_equation)
 	complex new_value;
 	double x_step = (double) 2/(columns-1);
 	double y_step = (double) 2/(rows-1);
-	stack<string> stack_temp , stack_temp2;
-	string aux;
-
 
 	for(int i = 0; i < rows; i++){ //Hace una busqueda binaria para reales e imaginarios, para cada pixel
 		for(int j = 0; j < columns; j++){
 
-			cout << stack_equation.get_top() <<endl;
+			//cout << stack_equation.get_top() <<endl;
 			new_value = pixel_val[i][j].get_position();
-			cout << "hola" <<endl;
-			new_value = calculator_rpn(stack_equation, new_value);
-			cout << "chau" <<endl;
+			//cout << "hola" <<endl;
+			stack<string> stack_temp(stack_equation);
+			new_value = calculator_rpn(stack_temp, new_value);
+			//cout << "chau" <<endl;
 			if(abs(new_value.get_real()) <= 1.0 && abs(new_value.get_imag()) <= 1.0){
-				cout << "chaux2" <<endl;
+				//cout << "chaux2" <<endl;
 				int r = round((-new_value.get_imag()+1)/y_step);
-				cout << "chaux3" <<endl;
+				//cout << "chaux3" <<endl;
 
 				int c = round((new_value.get_real()+1)/x_step);
-				cout << "chaux4" <<endl;
+				//cout << "chaux4" <<endl;
 
 				pixel_val[i][j].set_color(origen.pixel_val[r][c].get_color());
-				cout << "chaux5" <<endl;
+				//cout << "chaux5" <<endl;
 
 			}
 		}

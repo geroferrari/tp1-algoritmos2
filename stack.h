@@ -15,7 +15,6 @@ using namespace std;
 template <class T>
 class stack {
 
-
 private:
   node<T>* top;
    int size;
@@ -24,7 +23,7 @@ private:
 public:
   stack();
   stack(node<T> *,  int);
-  stack(const stack<T> &);
+  stack(stack<T> &);
   ~stack();
   node<T> * destructor(node<T> *);
   void push(T);
@@ -35,8 +34,10 @@ public:
   int get_size();
   bool empty();
   T copy(node<T> *, stack <T> &);
-  stack<T> & operator=(const stack<T> &);
+  stack<T> & operator=(stack<T> &);
 };
+
+
 
 
 template <class T>
@@ -46,6 +47,20 @@ stack<T>::stack() {
 	}
     size = 0;
 }
+
+template <class T>
+void stack<T>::push(T  val) {
+	node <T> * temp = new node<T> (val) ;
+	if (top == NULL) {
+        top = temp;
+    }
+    else {
+        temp->set_next(top);
+        top = temp;
+    }
+	size++;
+}
+
 template <class T>
 T stack<T>::copy(node<T> *n, stack <T> &s){
 	if (n->get_next()==NULL){
@@ -55,12 +70,25 @@ T stack<T>::copy(node<T> *n, stack <T> &s){
 	return n->get_data();
 }
 
-
 template <class T>
-stack<T>::stack(const stack<T> &s){
-		cout << "llegue" << endl;
+stack<T>::stack(stack<T> &s){
+	top=NULL;
+	size=0;
+
 		this->push(copy(s.top, *this));
-		cout << "sali" << endl;
+
+/*		node<T>* aux = s.top;
+		stack<T> aux_stack;
+		while(aux && aux->get_next()){
+			aux_stack.push(aux->get_data());
+			aux = aux->get_next();
+		}
+		aux = aux_stack.top;
+		while(aux && aux->get_next()){
+			this->push(aux->get_data());
+			aux = aux->get_next();
+		}
+		*/
 
 }
 
@@ -68,7 +96,9 @@ stack<T>::stack(const stack<T> &s){
 
 template <class T>
 stack<T>::~stack() {
+
 	while(!empty()){
+
 		pop();
 /*	cout << "destructor " <<endl;
   if (top){
@@ -77,8 +107,8 @@ stack<T>::~stack() {
 	      delete destructor(top);
 	  	cout << "delete " <<endl;
 */
-		cout << "borre" <<endl;
 	}
+
 }
 
 template <class T>
@@ -128,18 +158,6 @@ stack<T>::stack(node<T> *t,  int s){
 	size = s;
 }
 
-template <class T>
-void stack<T>::push(T  val) {
-	node <T> * temp = new node<T> (val) ;
-	if (top == NULL) {
-        top = temp;
-    }
-    else {
-        temp->set_next(top);
-        top = temp;
-    }
-	size++;
-}
 
 
 template <class T>
@@ -153,6 +171,7 @@ T stack<T>::pop() {
         return aux;
     }
     else {
+    	cout << "hola" <<endl;
     	   exit(1);
     }
 }

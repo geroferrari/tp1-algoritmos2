@@ -21,6 +21,7 @@ private:
 
 public:
   node(T , node<T> *p =NULL);
+  ~node();
 
   T get_data();
   void set_data(T);
@@ -33,6 +34,11 @@ template <class T>
 node<T>::node(T d, node<T> *p){
 	data = d;
 	next = p;
+}
+
+template <class T>
+node<T>::~node(){
+	next = NULL;
 }
 
 template <class T>
@@ -52,7 +58,10 @@ node<T>* node<T>::get_next(){
 
 template <class T>
 void node<T>::set_next(node <T> *n){
-	 next = n;
+	 if(n==NULL)
+		 next = NULL;
+	 else
+		 next = n;
 }
 
 #endif
