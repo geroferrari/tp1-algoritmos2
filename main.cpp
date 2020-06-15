@@ -207,6 +207,10 @@ void shunting_yard(string & tokens, stack<string> & numbers){
 			// pop opening brace.
 			if(operators.gettop() == "("){
 				operators.pop();
+				if(operators.gettop() == "exp" || operators.gettop() == "ln" || operators.gettop() == "arg" || operators.gettop() == "abs"|| operators.gettop() == "re" || operators.gettop() == "im")
+				{
+					numbers.push(operators.pop());
+				}
 			}
 			else{
 				cerr<< "Invalid parenthesis match" <<endl;
