@@ -13,6 +13,7 @@
 #include <string>
 #include <iostream>
 #include <ctime>
+#include <cmath>
 
 
 #include "stack.h"
@@ -20,13 +21,7 @@
 #include "image.h"
 #include "complex.h"
 #include "pixel.h"
-
-#define MASK_FLAG_IMAGIN 254 // 1111 1110
-#define MASK_FLAG_NUMBER 253 // 1111 1101
-#define MASK_FLAG_FUNCTION 251 // 1111 1011
-#define MASK_FLAG_OPERATOR 247 // 1111 0111
-#define MASK_FLAG_PARENTHESIS 239 // 1110 1111
-#define MASK_FLAG_NEGATIVE 223 // 1101 1111
+#include "calculator.h"
 
 
 using namespace std;
@@ -36,244 +31,6 @@ static void opt_output(string const &);
 static void opt_factor(string const &);
 static void opt_help(string const &);
 
-/*enum flags {
-	imaginary,
-	number,
-	function,
-	operation,
-	parenthesis,
-	n_flags
-};
-*/
-
-void lower_case (string &);
-
-void lower_case (string & s){
-	for(int i =0 ; i < s.length(); i++){
-	    if (isalpha(s[i])){
-	        if(isupper(s[i])){
-	            s[i]=s[i]+32;
-	        }
-	    }
-	}
-}
-
-
-stack<string> shunting_yard(string &);
-
-stack<string> shunting_yard(string & tokens){
-
-	// stack to store integers and operators.
-	stack <string> numbers;
-	stack <string> operators;
-	string aux;
-	string::size_type  next_position = 0;
-	//int flag[n_flags];
-	int flags = 128;
-	int count_left_paren = 0 , count_right_paren = 0;
-
-	lower_case(tokens);
-
-	for(int i = 0; i < tokens.length(); i++){
-
-/*************** se ingresa un espacio *******************/
-		if(tokens[i] == ' ')
-			continue;
-
-/*************** se ingresa un parentesis ( *******************/
-		else if(tokens[i] == '('){
-			count_left_paren++;
-			tokens[i] >> aux;
-			operators.push(aux);
-			flags = ~(flags | MASK_FLAG_PARENTHESIS); //FLAG = 0001 0000
-		}
-
-/*************** se ingresa un numero *******************/
-		else if(isdigit(tokens[i]) || (tokens[i] == '.' && isdigit(tokens[i+1]))){
-
-			double val = stod(tokens.substr(i), &next_position);
-			if (flags == MASK_FLAG_NEGATIVE){
-				val *= -1;
-			}
-			i += next_position;
-			val >> aux;
-			if (tokens[i]=='j' || tokens[i]=='i' || flags== MASK_FLAG_IMAGIN){
-				aux+='j';
-				i++;
-			}
-			numbers.push(aux);
-			flags = ~(flags | MASK_FLAG_NUMBER); // FLAG = 0000 0010
-		}
-
-
-
-/*************** se ingresa un parentesis ) *******************/
-		else if(tokens[i] == ')'){
-			count_right_paren++;
-
-			while(!operators.empty() && operators.top() != '(')
-			{
-				aux = operators.pop();
-				numbers.push(aux);
-			}
-			// pop opening brace.
-			if(operators.top() == '('){
-				operators.pop();
-			}
-			else{
-				cerr<< "Invalid arguments" <<endl;
-				exit(1);
-			}
-			flags = ~(flags | MASK_FLAG_PARENTHESIS); //FLAG = 0001 0000
-		}
-
-/*************** se ingresa una coma  *******************/
-		else if(tokens[i] == ','){
-		}
-
-/*************** se ingresa un numero complejo *******************/
-		else if(tokens[i] == 'z'){
-			tokens[i] >> aux;
-			numbers.push(aux);
-			flags = ~(flags | MASK_FLAG_NUMBER); // FLAG = 0000 0010
-		}
-
-/*************** se ingresa un numero imaginario *******************/
-		else if(tokens[i] == 'i' || tokens[i] == 'j'){
-			if (tokens[i]=='i' && tokens[i+1]=='m'){
-				aux = "im";
-				operators.push(aux);
-				i++;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-			}
-			else if(isdigit(tokens[i+1])){
-				flags = ~(flags | MASK_FLAG_IMAGIN); // FLAG = 0000 0001
-			}
-			else{
-				aux = "j";
-				numbers.push(aux);
-				flags = ~(flags | MASK_FLAG_IMAGIN); // FLAG = 0000 0001
-			}
-		}
-
-		else if(tokens[i] == 'r' && tokens[i+1] == 'e'){
-				aux = "re";
-				operators.push(aux);
-				i++;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-
-		else if(tokens[i] == 'e'){
-			if (tokens[i+1]=='x' && tokens[i+2]=='p'){
-				aux = "exp";
-				operators.push(aux);
-				i+=2;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-			}
-			else if (tokens[i+1]=='^'){
-				aux = "exp";
-				operators.push(aux);
-				i++;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-			}
-			else{
-				aux = "e";
-				numbers.push(aux);
-				flags = ~(flags | MASK_FLAG_NUMBER); // FLAG = 0000 0010
-			}
-		}
-
-		else if(tokens[i] == 'l'  && tokens[i+1]=='n'){
-				aux = "ln";
-				operators.push(aux);
-				i++;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-		else if(tokens[i] == 'a'  && tokens[i+1]=='b' && tokens[i+2]=='s'){
-				aux = "abs";
-				operators.push(aux);
-				i+=2;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-		else if(tokens[i] == 'p'  && tokens[i+1]=='h' && tokens[i+2]=='a'  && tokens[i+3]=='s' && tokens[i+4]=='e'){
-				aux = "arg";
-				operators.push(aux);
-				i+=4;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-		else if(tokens[i] == 's'  && (tokens[i+1]=='i' || tokens[i+1]=='e') && tokens[i+2]=='n'){
-				aux = "sin";
-				operators.push(aux);
-				i+=2;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-		else if(tokens[i] == 'c'  && tokens[i+1]=='o' && tokens[i+2]=='s'){
-				aux = "cos";
-				operators.push(aux);
-				i+=2;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-		else if(tokens[i] == 't'  && tokens[i+1]=='a' && tokens[i+2]=='n'){
-				aux = "tan";
-				operators.push(aux);
-				i+=2;
-				flags = ~(flags | MASK_FLAG_FUNCTION); //FLAG = 0000 0100
-		}
-
-/*************** se ingresa una letra distinta a las anteriores *******************/
-				else if(isalpha(token[i])){
-				}
-
-
-		// Current token is an operator.
-		else
-		{
-
-			while(!operators.empty() && operators(operators.top())
-								>= operators(tokens[i])){
-				int val2 = numbers.top();
-				numbers.pop();
-
-				int val1 = numbers.top();
-				numbers.pop();
-
-				char op = operators.top();
-				operators.pop();
-
-				numbers.push(maths(val1, val2, op));
-			}
-
-			// Push current token to 'operators'.
-			operators.push(tokens[i]);
-		}
-	}
-
-	//Do remaining operations
-	while(!operators.empty()){
-		int val2 = numbers.top();
-		numbers.pop();
-
-		int val1 = numbers.top();
-		numbers.pop();
-
-		char op = operators.top();
-		operators.pop();
-
-		numbers.push(maths(val1, val2, op));
-	}
-
-	// Top of 'numbers' contains result, return
-	return numbers.top();
-}
-
-	return factor;
-}
 
 // Tabla de opciones de línea de comando. El formato de la tabla
 // consta de un elemento por cada opción a definir. A su vez, en
@@ -377,26 +134,7 @@ opt_output(string const &arg)
 static void
 opt_factor(string const &arg)
 {
-	istringstream iss(arg);
-	// Intentamos extraer el factor de la línea de comandos.
-	// Para detectar argumentos que únicamente consistan de
-	// números enteros, vamos a verificar que EOF llegue justo
-	// después de la lectura exitosa del escalar.
-	//
-	if (!(iss >> factor)
-	    || !iss.eof()) {
-		cerr << "non-integer factor: "
-		     << arg
-		     << "."
-		     << endl;
-		exit(1);
-	}
-
-	if (iss.bad()) {
-		cerr << "cannot read integer factor."
-		     << endl;
-		exit(1);
-	}
+	factor = arg;
 }
 
 static void
@@ -406,7 +144,7 @@ opt_help(string const &arg)
 	     << endl;
 	exit(0);
 }
-
+/*
 void
 multiply(istream *is, ostream *os)
 {
@@ -433,7 +171,7 @@ multiply(istream *is, ostream *os)
 		exit(1);
 	}
 }
-
+*/
 
 void validate_img_format(){
 	 string input_line;
@@ -445,63 +183,29 @@ void validate_img_format(){
 	 }
 }
 
+
+
 int main(int argc, char * const argv[])
 {
 
-	/*
 	cmdline cmdl(options);	// Objeto con parametro tipo option_t (struct) declarado globalmente. Ver línea 51 main.cc
 	cmdl.parse(argc, argv); // Metodo de parseo de la clase cmdline
-	*/
 
-	/***************************************************
-	/* utilizado para calcular el tiempo de ejecucion *
-	unsigned t0, t1;
-	t0=clock();
-	***************************************************/
+	stack<string> stack_equation;
+	shunting_yard(factor, stack_equation);
 
-
-	/* valido que la imagen sea la adecuada
+	// valido que la imagen sea la adecuada
 	validate_img_format();
-
 	image img_origin(iss); // crea la imagen a partir de lo que lee por cmdline
 
-	multiply(iss, oss);	    // Función externa, no es un metodo de ninguna clase o estructura usada en el código
+	//multiply(iss, oss);	    // Función externa, no es un metodo de ninguna clase o estructura usada en el código
+
 
 	image img_destin(img_origin); // crea la imagen de salida copiando la de entrada
 
-	img_destin.transformation(img_origin , factor);  // se elige que funcion se aplicará a partir del valor de factor
+	img_destin.transformation(img_origin, stack_equation);  // se elige que funcion se aplicará a partir del valor de factor
 
 	img_destin.export_to_file(oss); // se guarda el archivo en  la imagen de salida
-
-
-	/***************************************************/
-	/* utilizado para calcular el tiempo de ejecucion *
-	t1 = clock();
-
-	double time = (double(t1-t0)/CLOCKS_PER_SEC);
-	cout << "Execution Time: " << time << endl;
-	***************************************************/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

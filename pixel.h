@@ -19,10 +19,10 @@ public:
 	~pixel();
 
 	/*Metodos */
-	void setColor(int); //seteo el color con el valor pasado
-	int getColor(); // obtengo el color de un pixel
-	void setPosition(complex); //seteo la posicion compleja
-	complex getPosition(); // obtengo la posicion de un pixel
+	void set_color(int); //seteo el color con el valor pasado
+	int get_color(); // obtengo el color de un pixel
+	void set_position(complex); //seteo la posicion compleja
+	complex get_position(); // obtengo la posicion de un pixel
 
 
 
