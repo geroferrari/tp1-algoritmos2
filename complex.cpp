@@ -176,7 +176,6 @@ complex complex::string2Complex(const string &s)
 {
 	size_t division;
 	string first, second;
-	bool neg = 0;
 	
 	division = s.find('j');
 
@@ -196,7 +195,6 @@ complex complex::string2Complex(const string &s)
 	{
 		imaginario = stod(second)*(-1);
 	}
-	cout << s[division-1] << "Hola!" << endl;
 	
 	return complex(real, imaginario);
 

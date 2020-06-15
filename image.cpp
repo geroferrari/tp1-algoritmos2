@@ -407,7 +407,6 @@ void image::negateimage(const image &origen)
 void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bool & flag_empty)
 {
 	string aux;
-	double arg1, arg2;
 	complex argc1, argc2;
 
 	if(flag_empty == 0)
