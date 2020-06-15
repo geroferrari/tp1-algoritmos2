@@ -432,13 +432,13 @@ void calculatorRPN(stack<string> & pila_original ,stack<string> & pila_final, bo
 		}
 		aux = pila_final.pop();
 		cout << aux << endl;
-		if(isdigit(aux[0]) || aux[0] == 'j')
+		if(isdigit(aux[0]) || aux[0] == 'j' || (aux[0] == '-' && isdigit(aux[1])) || (aux[0] == '-' && aux[1] == 'j'))
 		{
-			if(isdigit(aux[0]))
+			if(isdigit(aux[0])|| (aux[0] == '-' && isdigit(aux[1])))
 			{
 				aux = aux + "+j0";
 			}
-			if(aux[0] == 'j')
+			if(aux[0] == 'j' || (aux[0] == '-' && aux[1] == 'j'))
 			{
 				if(aux[1] == NULL) // En el caso que se haya puesto "j" solo, se modifica a "j1" para parsear bien
 				{
