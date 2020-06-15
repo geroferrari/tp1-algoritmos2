@@ -188,14 +188,15 @@ complex complex::string2Complex(const string &s)
 	//cout << "First: " << first << " , Second: " << second << endl;
 
 	real = stod(first);
-	if(s[division] == '+')
+	if(s[division-1] == '+')
 	{
 		imaginario = stod(second);
 	}
 	else
 	{
-		imaginario = stod(second);
+		imaginario = stod(second)*(-1);
 	}
+	cout << s[division-1] << "Hola!" << endl;
 	
 	return complex(real, imaginario);
 
@@ -209,6 +210,6 @@ string complex::complex2String(const complex & c)
 	}
 	else
 	{
-		return to_string(c.real) + "-j" + to_string(c.imaginario);
+		return to_string(c.real) + "-j" + to_string((c.imaginario*(-1)));
 	}
 }
