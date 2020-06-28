@@ -10,8 +10,8 @@
 pixel::pixel(){
 	/*inicializo el color en 0 */
 	color = 0;
-	position.setReal(0.0);
-	position.setImag(0.0);
+	position.set_real(0.0);
+	position.set_imag(0.0);
 }
 
 pixel::pixel(const pixel& p){
@@ -20,24 +20,25 @@ pixel::pixel(const pixel& p){
 	color = p.color;
 }
 
-void pixel::setColor(int pix){
+void pixel::set_color(int pix){
 	color = pix;
 }
 
-int pixel::getColor(){
+int pixel::get_color(){
 	return color;
 }
 
 
-void pixel::setPosition(complex c){
+void pixel::set_position(complex c){
 	position = c;
 }
 
-complex pixel::getPosition(){
+complex pixel::get_position(){
 	return position;
 }
 
 
 pixel::~pixel(){
 	color = 0;
+
 }

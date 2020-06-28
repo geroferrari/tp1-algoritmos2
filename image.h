@@ -8,13 +8,10 @@
 #include <string>
 #include <iostream>
 #include "pixel.h"
+#include "stack.h"
+
 using namespace std;
 
-enum function {
-	z,
-	exp_z,
-	ln_z
-};
 
 class image {
  public:
@@ -30,18 +27,18 @@ class image {
 
     /************************METODOS************************/
     /* GETTERS AND SETTERS */
-    void setimage( int &,  int &,  int &); // setea parametros imagen
-    void getimage( int &,  int &,  int &); // obtiene parametros imagen
+    void set_image( int &,  int &,  int &); // setea parametros imagen
+    void get_image( int &,  int &,  int &); // obtiene parametros imagen
 
-    void setPixelColor(const int &, const int &, const int &); //setea el valor de un pixel
-    int getPixelColor(const int , const int ); // obtiene el valor de un pixel
+    void set_pixel_color(const int &, const int &, const int &); //setea el valor de un pixel
+    int get_pixel_color(const int , const int ); // obtiene el valor de un pixel
 
-    void setRows(const int &); // setea el numero de filas
-    int& getRows();  // obtiene el numero de filas
-    void setColumns(const int &); //setea el numero de columnas
-    int& getColumns(); // obtiene el numero de columnas
-    void setGreys(const int &); //setea la cantidad de grises
-    int& getGreys(); // obtiene la cantidad de grises
+    void set_rows(const int &); // setea el numero de filas
+    int& get_rows();  // obtiene el numero de filas
+    void set_columns(const int &); //setea el numero de columnas
+    int& get_columns(); // obtiene el numero de columnas
+    void set_greys(const int &); //setea la cantidad de grises
+    int& get_greys(); // obtiene la cantidad de grises
 
 
 
@@ -51,13 +48,11 @@ class image {
 
 
     /* OTROS */
-    void exp_z(const image&); // calcula la exponencial de los elementos de la matriz
     void export_to_file(ostream *); //imprime la imagen en un archivo
- 	void transformation(const image&, const string &);
- 	void id_z(const image&);
- 	void ln_z(const image&);
- 	void add_exp_ln(const image&);
- 	void negateimage(const image& );
+ 	void transformation(const image&,  stack<string> &);
+ 	void negate_image(const image& );
+
+ 	friend ostream& operator<<(ostream &, const image&);
 
  private :
  	string comment;

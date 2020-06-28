@@ -2,10 +2,10 @@
 CXX = g++
 CXXFLAGS = -g -Wall
 
-all: programa_tp0 clean
+all: tp1 clean
 
-programa_tp0: main.o complex.o cmdline.o pixel.o image.o
-	$(CXX) $(CXXFLAGS) -o programa_tp0 main.o complex.o cmdline.o pixel.o image.o
+tp1: main.o complex.o cmdline.o pixel.o image.o calculator.o
+	$(CXX) $(CXXFLAGS) -o tp1 main.o complex.o cmdline.o pixel.o image.o calculator.o
 
 main.o: main.cpp  
 	$(CXX) $(CXXFLAGS) -c main.cpp -o main.o
@@ -21,6 +21,9 @@ complex.o: complex.cpp complex.h
 
 image.o:  image.cpp image.h 
 	$(CXX) $(CXXFLAGS) -c image.cpp -o image.o
+
+calculator.o:  calculator.cpp calculator.h 
+	$(CXX) $(CXXFLAGS) -c calculator.cpp -o calculator.o
 
 clean:
 	$(RM) -vf *.o *.exe *.t *.out *.err
